@@ -36,7 +36,7 @@ function UserRegistrationForm() {
     }).catch((err)=>{
         console.log(err)
     })
-    
+     
   };
 
   return (
