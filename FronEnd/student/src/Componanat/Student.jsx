@@ -1,32 +1,37 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link} from 'react-router-dom';
 
 function DataTable() {
-const[data,setState]=useState([])
-const navigate=useNavigate()
-useEffect(()=>{
-  fetchData();
+
+  const [data, setData] = useState([]);
+
+useEffect(() => {
+        
+  const apiUrl = 'http://localhost:8080/docs'; 
+
+
+  const authToken = localStorage.getItem("token");
+
   
-},[])
-const fetchData= async()=>{
-  await fetch("http://localhost:8080/docs",{
-    headers:{
-      'Content-type':"aplication/json",
-      "Authorization":`Bearer ${localStorage.getItem("token")}`
+  axios.get(apiUrl, {
+    headers: {
+      'Authorization': `Bearer ${authToken}`
     }
   })
-  .then((res) => res.json())
-  .then((json) => {
-      setState(json);
-      console.log(json)
+  .then((response) => {
+    setData(response.data);
+    console.log(response)
+  })
+  .catch((error) => {
+    console.error(error);
+
   });
-}
-  
-const AddDocs=()=>{
-   navigate('/docs_details')
-}
- console.log(data, "datadatadata");
+}, []);
+
+
+ 
 
   return (
     <Table responsive striped bordered hover>
@@ -48,8 +53,8 @@ const AddDocs=()=>{
             <td>{item.email}</td>
             <td>
           
-              <button className="btn btn-success " onClick="AddDocs()">Add Docs</button>
-              <button className="btn btn-info">Details</button>
+               <Link to={`/docs_details/${item.email}`}><button className="btn btn-success " >Details</button></Link>
+               <Link to='/add_docs'> <button className="btn btn-info" >Add Docs</button></Link>
             </td>
           </tr>
         ))}

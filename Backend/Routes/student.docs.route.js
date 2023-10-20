@@ -18,10 +18,9 @@ docsRouter.post("/create",async(req,res)=>{
         short_description,
         student:user.name,
         student_email:user.email
-
     });
     await new_docs.save();
-    res.send("docs is created")
+    res.send({massage:"docs is created"})
     
 })
 docsRouter.put("/edit/:Id",async(req,res)=>{
@@ -36,7 +35,7 @@ docsRouter.put("/edit/:Id",async(req,res)=>{
     const docs_email=docs.student_email
 
     if(user_email!=docs_email){
-       res.send("You are unauthorized to do this")
+       res.send({massage:"You are unauthorized to do this"})
     }
     else{
         const updated_docs=await DocsModel.findByIdAndUpdate(blogId,payload)
@@ -67,6 +66,11 @@ docsRouter.delete("/delete/:Id",async(req,res)=>{
         res.send(`blog${blogId} Deleted`)
     }
     
+})
+docsRouter.get("/all_docs", async(req,res)=>{
+    const user_Id=req.user_id
+   const allBlog=await DocsModel.find({email:user_Id.email})
+   res.send({massage:"Succesfull" ,AllDocs:allBlog})
 })
 
 module.exports={docsRouter};

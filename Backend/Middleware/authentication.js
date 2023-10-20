@@ -19,6 +19,8 @@ else{
           const user_id=decoded.user_id
           req.user_id=user_id;
           console.log(user_id);
+          const user_email=decoded.email
+          req.email=user_email
          next();
         }
       });
